@@ -133,6 +133,16 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setActiveOrder(prev => prev ? { ...prev, status: OrderStatus.ARRIVED } : null);
          setPastOrders(prevOrders => prevOrders.map(o => o.id === activeOrder.id ? {...o, status: OrderStatus.ARRIVED } : o));
       }, 10000); // 10 seconds to arrive (simulated)
+    } else if (activeOrder && activeOrder.status === OrderStatus.ARRIVED) {
+       intervalId = setTimeout(() => {
+        setActiveOrder(prev => prev ? { ...prev, status: OrderStatus.FUELLING } : null);
+         setPastOrders(prevOrders => prevOrders.map(o => o.id === activeOrder.id ? {...o, status: OrderStatus.FUELLING } : o));
+      }, 4000); // 4 seconds to start fuelling (simulated)
+    } else if (activeOrder && activeOrder.status === OrderStatus.FUELLING) {
+       intervalId = setTimeout(() => {
+        setActiveOrder(prev => prev ? { ...prev, status: OrderStatus.COMPLETED } : null);
+         setPastOrders(prevOrders => prevOrders.map(o => o.id === activeOrder.id ? {...o, status: OrderStatus.COMPLETED } : o));
+      }, 6000); // 6 seconds to complete fuelling (simulated)
     }
 
     return () => clearTimeout(intervalId);

@@ -61,6 +61,7 @@ const ProfileSetupScreen: React.FC = () => {
               setFullName(e.target.value);
               if (formError) setFormError('');
             }}
+            maxLength={100}
             error={formError && formError.includes('Name') ? formError : undefined}
             required
           />

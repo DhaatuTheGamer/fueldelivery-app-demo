@@ -7,7 +7,7 @@ import { useVehicles } from '../contexts/VehicleContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useOrders } from '../contexts/OrderContext';
 import useLocation from '../hooks/useLocation';
-import { PlusCircle, Search } from 'lucide-react';
+import { PlusCircle, Search, Edit3 } from 'lucide-react';
 import { DEFAULT_LOCATION, APP_NAME } from '../constants';
 
 const HomeScreen: React.FC = () => {
@@ -19,6 +19,7 @@ const HomeScreen: React.FC = () => {
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   const [deliveryAddress, setDeliveryAddress] = useState<string>("Detecting location...");
   const [showLocationPermissionModal, setShowLocationPermissionModal] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   useEffect(() => {
     // Try to get location only once when component mounts if not already available or denied
@@ -53,18 +54,20 @@ const HomeScreen: React.FC = () => {
   }, [vehicles, selectedVehicleId]);
 
   const handleOrderFuel = () => {
+    setOrderError(null); // Clear previous errors
+
     if (!selectedVehicleId) {
-      alert("Please select a vehicle."); // Or a more user-friendly notification
+      setOrderError("Please select a vehicle.");
       return;
     }
     const selectedVehicle = vehicles.find(v => v.id === selectedVehicleId);
     if (!selectedVehicle) {
-      alert("Selected vehicle not found.");
+      setOrderError("Selected vehicle not found. Please try again.");
       return;
     }
     if (!userLocation || (!userLocation.latitude && !userLocation.longitude)) {
-        alert("Delivery location is not set. Please enable location services or set manually.");
-        return;
+      setOrderError("Delivery location is not set. Please enable location or set manually.");
+      return;
     }
 
     updateCurrentOrder({
@@ -89,15 +92,18 @@ const HomeScreen: React.FC = () => {
       {/* Top Bar - Delivery Address */}
       <div className="p-3 bg-white shadow mb-1 sticky top-0 z-10">
         <div
-          className="w-full text-left p-3 border border-gray-300 rounded-lg flex items-center cursor-default"
+          className="w-full text-left p-3 border border-gray-300 rounded-lg flex items-center justify-between cursor-default"
         >
-          <Search size={20} className="text-gray-500 mr-2 flex-shrink-0" />
-          <div className="flex-grow">
-            <span className="text-xs text-gray-500 block">Deliver to:</span>
-            <span className={`text-sm font-medium ${locationLoading ? 'text-gray-400 animate-pulse' : 'text-gray-800'}`}>
-              {locationLoading ? 'Loading address...' : deliveryAddress}
-            </span>
+          <div className="flex items-center"> {/* Wrap Search and text */}
+            <Search size={20} className="text-gray-500 mr-2 flex-shrink-0" />
+            <div className="flex-grow">
+              <span className="text-xs text-gray-500 block">Deliver to:</span>
+              <span className={`text-sm font-medium ${locationLoading ? 'text-gray-400 animate-pulse' : 'text-gray-800'}`}>
+                {locationLoading ? 'Loading address...' : deliveryAddress}
+              </span>
+            </div>
           </div>
+          <Edit3 size={16} className="text-gray-400 ml-2 flex-shrink-0" /> {/* Added icon */}
         </div>
       </div>
 
@@ -126,7 +132,10 @@ const HomeScreen: React.FC = () => {
                 key={vehicle.id}
                 vehicle={vehicle}
                 isSelected={selectedVehicleId === vehicle.id}
-                onClick={() => setSelectedVehicleId(vehicle.id)}
+                onClick={() => {
+                    setSelectedVehicleId(vehicle.id);
+                    setOrderError(null); // Clear error when a vehicle is selected
+                }}
                 className="flex-shrink-0 w-52"
               />
             ))}
@@ -140,6 +149,10 @@ const HomeScreen: React.FC = () => {
           </div>
         )}
         
+        {orderError && (
+          <p className="text-red-500 text-sm text-center mb-3">{orderError}</p>
+        )}
+
         <Button 
           onClick={handleOrderFuel} 
           fullWidth 

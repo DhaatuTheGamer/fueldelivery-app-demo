@@ -112,6 +112,7 @@ const AddEditVehicleScreen: React.FC = () => {
           placeholder="e.g., My Office Car, Mom's Activa"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
+          maxLength={50}
           required
         />
         <Input

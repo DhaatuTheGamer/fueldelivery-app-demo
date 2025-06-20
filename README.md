@@ -109,7 +109,7 @@ The application implements several key user flows:
 2.  **Core Ordering Process:**
     *   Home/Map Dashboard (Select/Add Vehicle, Set Location) -> Order Configuration (Quantity, Price) -> Checkout & Payment (Simulated).
 3.  **Post-Order Experience:**
-    *   Order Placed & Searching for Captain -> Live Tracking Screen (Captain Info, ETA, OTP) -> Rate Your Experience.
+    *   Order Placed & Searching for Captain -> Live Tracking Screen (Captain Info, ETA, OTP, transitions through En Route, Arrived, Fuelling, and Completed statuses) -> Rate Your Experience.
 4.  **Auxiliary Screens (via Bottom Navigation/Profile):**
     *   My Orders (Ongoing, Past)
     *   Help & Support (FAQs, Contact options)
@@ -123,7 +123,7 @@ Please be aware that several features are currently **simulated** for demonstrat
 -   **Backend Operations:** All data (vehicles, orders) is stored and managed in `localStorage`. There are no actual API calls to a remote backend.
 -   **Payment Processing:** Payment steps are UI-only simulations. No real payment gateways are integrated.
 -   **Location Services & Maps:** Location detection uses browser geolocation (if permitted) or defaults. The map display is a placeholder (`MapPlaceholder.tsx`) and does not show real-time GPS data or dynamic routing.
--   **Delivery Captain Logic:** Assignment, ETA calculation, and movement are simulated using `setTimeout` and predefined logic.
+-   **Delivery Captain Logic:** Assignment, ETA calculation, and status progression (including Searching, Assigned, En Route, Arrived, Fuelling, and Completed) are simulated using `setTimeout` and predefined logic.
 -   **Push Notifications:** Described in flows but not implemented as actual system notifications.
 
 ## API Key Handling
