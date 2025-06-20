@@ -88,9 +88,8 @@ const HomeScreen: React.FC = () => {
     <div className="flex flex-col h-[calc(100vh-4rem-4rem)] sm:h-[calc(100vh-4rem)]"> {/* Adjust for nav and potential header */}
       {/* Top Bar - Delivery Address */}
       <div className="p-3 bg-white shadow mb-1 sticky top-0 z-10">
-        <button 
-          onClick={() => alert("Address search/manual pin drag not implemented yet.")}
-          className="w-full text-left p-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center"
+        <div
+          className="w-full text-left p-3 border border-gray-300 rounded-lg flex items-center cursor-default"
         >
           <Search size={20} className="text-gray-500 mr-2 flex-shrink-0" />
           <div className="flex-grow">
@@ -99,7 +98,7 @@ const HomeScreen: React.FC = () => {
               {locationLoading ? 'Loading address...' : deliveryAddress}
             </span>
           </div>
-        </button>
+        </div>
       </div>
 
       {/* Map View */}
